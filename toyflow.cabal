@@ -1,0 +1,41 @@
+name:     toyflow
+version:  0.0.0
+homepage: https://github.com/arendsee/toyflow
+synopsis: toyflow builds nodes with checks
+description:
+
+    This is a toy program. Written simple to develop a few ideas in isolation,
+    before porting them to somewhere more permanent.
+
+author:             Zebulun Arendsee 
+maintainer:         arendsee@iastate.edu
+cabal-version:      >= 1.10
+bug-reports:        https://github.com/arendsee/toyflow/issues
+build-type:         Simple
+
+flag documentation
+    default: False
+
+library
+    default-language: Haskell2010
+    hs-source-dirs: src
+    exposed-modules: ToyFlow,
+                     ToyFlow.Filters,
+                     ToyFlow.Log,
+                     ToyFlow.Node
+
+    build-depends: base
+
+    ghc-options: -Wall
+
+    if flag(documentation)
+        build-depends: hscolour
+
+executable toyflow
+    default-language: Haskell2010
+    main-is: Main.hs
+    hs-source-dirs: .
+    build-depends: base,
+                   toyflow
+
+    ghc-options: -Wall
