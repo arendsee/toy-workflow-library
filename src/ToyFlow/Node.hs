@@ -16,9 +16,6 @@ instance Monoid e => Monad (Node e) where
   -- propagate failure
   Node (Left e1) >>= _ = Node (Left e1)
 
--- Due to the Applicative Monad Proposal, which requires all Monads be explicit
--- instances of Applicative andFunctor, just defining the monad 
-
 instance Monoid e => Functor (Node e) where
   fmap = liftM
 
