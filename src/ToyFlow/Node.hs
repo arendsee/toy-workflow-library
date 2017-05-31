@@ -3,6 +3,15 @@ module ToyFlow.Node (Node(..)) where
 import Control.Monad
 import Data.Monoid
 
+type FilePath = String
+
+data Log
+  = Error   Text 
+  | Warning Text
+  | Note    Text
+  | Summary Text
+  | File    Text FilePath
+
 -- | Passes along two possible states, for success and failure.  A failure
 -- prevents future processing, propagating the final message.
 data Node e o = Node (Either e (e, o))
