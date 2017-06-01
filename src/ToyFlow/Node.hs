@@ -3,27 +3,21 @@ module ToyFlow.Node (Node(..)) where
 import Control.Monad
 import Data.Monoid
 
-type FilePath = String
+{- data Log            -}
+{-   = Error   String  -}
+{-   | Warning String  -}
+{-   | Note    String  -}
 
-data Log
-  = Error   Text 
-  | Warning Text
-  | Note    Text
-  | Summary Text
-  | File    Text FilePath
-
--- | Passes along two possible states, for success and failure.  A failure
--- prevents future processing, propagating the final message.
-data Node e o = Node (Either e (e, o))
+data Node e o = Node e (Maybe o)
 
 instance Monoid e => Monad (Node e) where
-  return x = Node (Right (mempty, x)) 
+  return x = Node mempty (Just x)
   -- concatenate logs (stderr) and transform result
-  Node (Right (e1, x)) >>= f = case f x of
-    (Node (Right (e2, x2))) -> Node $ Right (e1 <> e2, x2)
-    (Node (Left e2)) -> Node $ Left (e1 <> e2)
+  Node e1 (Just x1) >>= f = case f x1 of
+    Node e2 (Just x2) -> Node (e1 <> e2) (Just x2)
+    Node e2 Nothing   -> Node (e1 <> e2) Nothing
   -- propagate failure
-  Node (Left e1) >>= _ = Node (Left e1)
+  Node e1 Nothing >>= _ = Node e1 Nothing
 
 instance Monoid e => Functor (Node e) where
   fmap = liftM
@@ -33,5 +27,5 @@ instance Monoid e => Applicative (Node e) where
   (<*>) = ap
 
 instance (Show e, Show o) => Show (Node e o) where
-  show (Node (Left e)) = show e ++ "\n *** FAILURE ***"
-  show (Node (Right (e, o))) = show e ++ "\n" ++ show o
+  show (Node e Nothing)  = show e ++ "\n *** FAILURE ***"
+  show (Node e (Just x)) = show e ++ "\n" ++ show x

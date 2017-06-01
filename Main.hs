@@ -6,10 +6,10 @@ import ToyFlow.Filters
 main :: IO ()
 main = do
   hPutStrLn stderr "-----------------------------------------"
-  writeResult $ return 100 >>= trydivide' 2 >>= trydivide' 10
-                           >>= trydivide' 0 >>= trydivide' 10
+  writeResult $ return 100.0 >>= dividenode 2.0 >>= dividenode 10.0
+                           >>= dividenode 0.0 >>= dividenode 10.0
 
   hPutStrLn stderr "-----------------------------------------"
-  writeResult $ return 100 >>= trydivide' 2  >>= trydivide' 10
-                           >>= trydivide' 10 >>= trydivide' 10
-                           >>= couple' "foo"
+  writeResult $ return 100.0 >>= dividenode 2.0  >>= dividenode 10.0
+                           >>= dividenode 10.0 >>= dividenode 10.0
+                           >>= couplenode "foo"
