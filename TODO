@@ -1,31 +1,12 @@
-next
- [ ] build workflow datastructure: a directed graph of nodes
- [ ] add Summary typeclass
- [ ] add Cache typeclass
- [ ] each node holds a computation
- [ ] the node can be in one of two states, pass or fail
- [ ] messages are stored as Error, Warning, Message, Log
- [ ] each datum is a member of class Summary
- [ ] each datum is a member of class Cache
- [ ] the summary of each datum is stored
- [ ] the output can be flagged as TEMP, INTER, or FINAL
-     - if TEMP, the value is not saved, only a summary of it
-     - if INTER, the value is saved as a file in the temp directory
-     - if FINAL, the value is saved as a file in the FINAL directory
+identify features I want and implement them independently
 
+  [ ] Error handling, for when a result is not possible
+  [ ] Warning and Note handling, for when a result is possible
+  [ ] Result handler (in IO), the output can be flagged as TEMP, INTER, or FINAL
+    - if TEMP, the value is not saved, only a summary of it
+    - if INTER, the value is saved as a file in the temp directory
+    - if FINAL, the value is saved as a file in the FINAL directory
+  [ ] A caching monad (in IO)
+  [ ] A summarization monad
 
-Build a graph
-
-Sweep through it once to perform all calculations, transforming stored
-functions into references to files, stored messages and summaries.
-
-Sweep through a second time verifying state (this time values across nodes can be compared.
-
-Sweep a third time to prepare the final report
-
-Sweep a fourth time to delete temporary files, remove intermediate data,
-organize final data, prep and store all materia.
-
-
-My approach is wrong, I need to find a monadic solution. I'll jump into a dev
-branch and reimplement this.
+then merge them all into one
