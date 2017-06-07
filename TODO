@@ -1,10 +1,7 @@
-first
- [ ] stabilize what I have
- [ ] add Summary typeclass
- [ ] add Cache typeclass
-
 next
  [ ] build workflow datastructure: a directed graph of nodes
+ [ ] add Summary typeclass
+ [ ] add Cache typeclass
  [ ] each node holds a computation
  [ ] the node can be in one of two states, pass or fail
  [ ] messages are stored as Error, Warning, Message, Log
@@ -28,3 +25,7 @@ Sweep a third time to prepare the final report
 
 Sweep a fourth time to delete temporary files, remove intermediate data,
 organize final data, prep and store all materia.
+
+
+My approach is wrong, I need to find a monadic solution. I'll jump into a dev
+branch and reimplement this.
