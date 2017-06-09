@@ -21,9 +21,10 @@ library
     hs-source-dirs: src
     exposed-modules: ToyFlow,
                      ToyFlow.Filters,
+                     ToyFlow.Summary,
                      ToyFlow.Node
 
-    build-depends: base
+    build-depends: base, containers, pureMD5
 
     ghc-options: -Wall
 
