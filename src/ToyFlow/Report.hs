@@ -11,14 +11,31 @@ module ToyFlow.Report
 (
     Report(..)
   , ShowE(..)
+  , fail
+  , stop
+  , warn
+  , note
 ) where
 
+import Prelude hiding(fail)
 import Data.Monoid ((<>), mempty)
 
 data Report e a
   = Pass a e e
   | Fail e e e
   deriving(Eq,Ord,Show)
+
+fail :: (Monoid e) => e -> Report e a
+fail e = Fail e mempty mempty
+
+stop :: (Monoid e) => e -> a -> Report e a
+stop e _ = Fail e mempty mempty
+
+warn :: (Monoid e) => e -> a -> Report e a
+warn e x = Pass x e mempty
+
+note :: (Monoid e) => e -> a -> Report e a
+note e x = Pass x mempty e
 
 instance (Monoid e) => Monad (Report e) where
   return x = Pass x mempty mempty

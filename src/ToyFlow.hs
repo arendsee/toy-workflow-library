@@ -1,11 +1,12 @@
 module ToyFlow
 (
     writeResult
-  , Report(..)
+  , module ToyFlow.Report
 ) where
 
 import System.IO
 
+import Prelude hiding(fail)
 import ToyFlow.Report
 
 writeResult :: (Monoid e, ShowE e, Show o) => Report e o -> IO ()

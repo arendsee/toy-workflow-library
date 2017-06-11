@@ -1,3 +1,4 @@
+import Prelude hiding(fail)
 import ToyFlow
 
 type ReportS = Report [String] 
@@ -6,9 +7,9 @@ type ReportS = Report [String]
 -- of the quotient in the monadic sequence
 divide' :: Double -> Double -> ReportS Double
 divide' y x
-  | y == 0 = Fail ["Division by 0 in " ++ expr] [] []
-  | y > 1000 = Pass (x / y) ["denominator is over 1000 in " ++ expr] []
-  | otherwise = Pass (x / y) [] ["executed " ++ expr]
+  | y == 0 = fail ["Division by 0 in " ++ expr]
+  | y > 1000  = return (x / y) >>= warn ["denominator is over 1000 in " ++ expr]
+  | otherwise = return (x / y) >>= note ["executed " ++ expr]
   where
     expr = "(" ++ show x ++ " / " ++ show y ++ ")"
 
