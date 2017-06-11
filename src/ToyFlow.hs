@@ -1,10 +1,16 @@
-module ToyFlow (writeResult) where
+module ToyFlow
+(
+    writeResult
+  , Report(..)
+) where
 
 import System.IO
 
-import ToyFlow.Node
+import ToyFlow.Report
 
-writeResult :: (Show e, Show o) => Node e o -> IO ()
-writeResult (Node e Nothing) = hPutStr stderr (show e)
-writeResult (Node e (Just o)) =
-  hPutStr stderr (show e) >> hPutStrLn stdout (show o)
+writeResult :: (Monoid e, ShowE e, Show o) => Report e o -> IO ()
+writeResult (Pass x w n)
+  =  hPutStr stdout (show x)
+  >> hPutStr stderr (show3E mempty w n)
+writeResult (Fail e w n)
+  =  hPutStr stderr (show3E e w n)

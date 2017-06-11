@@ -1,3 +1,2 @@
 dist/
-*.o
-*.hi
+toyflow

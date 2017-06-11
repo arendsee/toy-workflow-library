@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+
 {-| Error and Warning handling.
  -
  - The goal here is to be able to distinguish between Errors, which return no
@@ -5,7 +7,11 @@
  -
  -}
 
-module ToyFlow.Report (Report(..)) where
+module ToyFlow.Report
+(
+    Report(..)
+  , ShowE(..)
+) where
 
 import Data.Monoid ((<>), mempty)
 
@@ -33,3 +39,34 @@ instance (Monoid e) => Applicative (Report e) where
   Pass _  w1 n1 <*> Fail e2 w2 n2 = Fail e2         (w1 <> w2) (n1 <> n2)
   Fail e1 w1 n1 <*> Pass _  w2 n2 = Fail e1         (w1 <> w2) (n1 <> n2)
   Fail e1 w1 n1 <*> Fail e2 w2 n2 = Fail (e1 <> e2) (w1 <> w2) (n1 <> n2)
+
+class ShowE e where
+  showE :: e -> String
+
+  showError :: e -> String
+  showError = showE
+
+  showWarning :: e -> String
+  showWarning = showE
+
+  showNote :: e -> String
+  showNote = showE
+
+  show3E :: e -> e -> e -> String
+  show3E e w n = unlines [showError e, showWarning w, showNote n]
+
+instance ShowE [String] where
+  showE = unlines
+
+  show3E e w n = concat
+    [
+      showError   (map (\x -> "ERROR: "   ++ x) e)
+    , showWarning (map (\x -> "WARNING: " ++ x) w)
+    , showNote    (map (\x -> "NOTE: "    ++ x) n)
+    , summary'
+    ]
+    where
+      ne = show $ length e
+      nw = show $ length w
+      nn = show $ length n
+      summary' = unwords [ne, "error(s),", nw, "warning(s),", nn, "note(s)\n"]

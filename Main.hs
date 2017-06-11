@@ -1,15 +1,26 @@
-import System.IO
+import ToyFlow
 
-import ToyFlow (writeResult)
-import ToyFlow.Filters
+type ReportS = Report [String] 
+
+-- Note the arguments are reversed (y x), this is too allow partial application
+-- of the quotient in the monadic sequence
+divide' :: Double -> Double -> ReportS Double
+divide' y x
+  | y == 0 = Fail ["Division by 0 in " ++ expr] [] []
+  | y > 1000 = Pass (x / y) ["denominator is over 1000 in " ++ expr] []
+  | otherwise = Pass (x / y) [] ["executed " ++ expr]
+  where
+    expr = "(" ++ show x ++ " / " ++ show y ++ ")"
+
 
 main :: IO ()
 main = do
-  hPutStrLn stderr "-----------------------------------------"
-  writeResult $ return 100.0 >>= dividenode 2.0 >>= dividenode 10.0
-                           >>= dividenode 0.0 >>= dividenode 10.0
-
-  hPutStrLn stderr "-----------------------------------------"
-  writeResult $ return 100.0 >>= dividenode 2.0  >>= dividenode 10.0
-                           >>= dividenode 10.0 >>= dividenode 10.0
-                           >>= couplenode "foo"
+  writeResult $
+    divide' <$> (
+                       divide' 10000 10  -- warning
+                   >>= divide' 10        -- note
+                   >>= divide' 10        -- note
+                   >>= divide' 0         -- error
+                   >>= divide' 0         -- error (this one will be skipped)
+                )
+            <*> divide' 0 1 -- error
