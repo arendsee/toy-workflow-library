@@ -16,7 +16,7 @@ divide' y x
 
 main :: IO ()
 main = do
-  writeResult $
+  writeResultAndExit $
     divide' <$> (
                        divide' 10000 10  -- warning
                    >>= divide' 10        -- note
