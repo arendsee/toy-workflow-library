@@ -6,3 +6,5 @@ errors (which toggle failed states), warnings (which don't but need to be shown
 to the user), caching and cache invalidation, result generation, summary
 chaining, etc etc. The steps need to fold together into a final result, which
 contains references to outputs (on success) or an error report (on failure).
+
+I will table the repo for now, and merge the relevent pieces of code into Fagin.
